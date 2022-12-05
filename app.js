@@ -5,6 +5,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const dirTree = require("directory-tree");
+const fs = require("fs");
 
 require("dotenv/config");
 
@@ -20,8 +21,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post("/", (req, res) => {
-  const tree = dirTree("./");
-  res.send(tree);
+  fs.readdir("./", (err, files) => {
+    res.send(files);
+  });
+
+  return;
 
   let sampleFile;
   let uploadPath;
