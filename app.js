@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const path = require("path");
-const fs = require("fs");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const dirTree = require("directory-tree");
@@ -20,11 +19,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("index.html");
-});
-
 app.post("/", (req, res) => {
+  const tree = dirTree("./");
+  res.send(tree);
+
   let sampleFile;
   let uploadPath;
 
@@ -40,9 +38,7 @@ app.post("/", (req, res) => {
   sampleFile.mv(uploadPath, function (err) {
     if (err) return res.status(500).send(err);
 
-    const tree = dirTree("./uploads/");
-
-    res.send({ message: "File uploaded!", tree });
+    res.send({ message: "File uploaded!" });
   });
 });
 
