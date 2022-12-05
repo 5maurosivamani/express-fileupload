@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
+const dirTree = require("directory-tree");
 
 require("dotenv/config");
 
@@ -39,7 +40,9 @@ app.post("/", (req, res) => {
   sampleFile.mv(uploadPath, function (err) {
     if (err) return res.status(500).send(err);
 
-    res.send("File uploaded!");
+    const tree = dirTree("./uploads/");
+
+    res.send({ message: "File uploaded!", tree });
   });
 });
 
